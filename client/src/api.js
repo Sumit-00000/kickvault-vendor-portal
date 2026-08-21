@@ -23,3 +23,24 @@ export async function apiFetch(
   }
   return data
 }
+
+// Downloads an authenticated file (e.g. a PDF) and saves it via a temporary
+// object URL — needed because plain links can't carry the Bearer token.
+export async function apiDownload(path, token, filename) {
+  const res = await fetch(`/api${path}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}))
+    throw new Error(data.error || `Download failed (${res.status})`)
+  }
+  const blob = await res.blob()
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+  document.body.appendChild(a)
+  a.click()
+  a.remove()
+  URL.revokeObjectURL(url)
+}

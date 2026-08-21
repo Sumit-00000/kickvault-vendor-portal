@@ -3,6 +3,8 @@ const authRoutes = require('./routes/auth');
 const kycRoutes = require('./routes/kyc');
 const shoesRoutes = require('./routes/shoes');
 const adminShoesRoutes = require('./routes/adminShoes');
+const adminVendorsRoutes = require('./routes/adminVendors');
+const mrnRoutes = require('./routes/mrn');
 
 const app = express();
 
@@ -22,8 +24,10 @@ app.use(authRoutes);
 app.use(kycRoutes);
 app.use(shoesRoutes);
 app.use(adminShoesRoutes);
+app.use(adminVendorsRoutes);
+app.use(mrnRoutes);
 // Feature routes are mounted here as they are implemented
-// (mrn, invoices, price-requests, dashboards).
+// (invoices, price-requests, dashboards).
 
 // 404 for unknown routes
 app.use((req, res) => {

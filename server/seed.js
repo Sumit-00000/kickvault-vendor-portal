@@ -110,6 +110,8 @@ transaction(() => {
   ]) {
     db.prepare(`DELETE FROM ${table}`).run();
   }
+  // Reset AUTOINCREMENT counters so seeded ids are deterministic across runs.
+  db.prepare("DELETE FROM sqlite_sequence WHERE name IN ('users','mrn_items','invoice_lines')").run();
 
   const passwordHash = bcrypt.hashSync(PASSWORD, 10);
   const idByEmail = {};

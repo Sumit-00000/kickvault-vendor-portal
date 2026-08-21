@@ -415,3 +415,75 @@ th.num {
 td select {
   width: auto;
 }
+
+/* ---- MRN cards / signing ---- */
+.mrn-card {
+  margin-bottom: 1rem;
+}
+
+.mrn-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.mrn-head h3 {
+  margin: 0;
+}
+
+.mrn-card table {
+  margin: 0.75rem 0;
+}
+
+.mrn-signed {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.sign-form {
+  border-top: 1px solid var(--line);
+  padding-top: 0.9rem;
+}
+
+.check-field {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.check-field input {
+  width: auto;
+  margin-top: 0.2rem;
+}
+
+.sign-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.sign-name {
+  flex: 1;
+  max-width: 300px;
+  margin-bottom: 0;
+}
+
+.item-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  max-width: 640px;
+}
+
+.item-row select {
+  flex: 1;
+}
+
+.item-row input {
+  width: 5.5rem;
+}
