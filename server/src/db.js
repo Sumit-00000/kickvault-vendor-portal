@@ -83,6 +83,17 @@ CREATE TABLE IF NOT EXISTS price_requests (
   createdAt       TEXT    NOT NULL DEFAULT (datetime('now'))
 );
 
+CREATE TABLE IF NOT EXISTS return_requests (
+  id         TEXT    PRIMARY KEY,
+  shoeId     TEXT    NOT NULL REFERENCES shoes(id),
+  vendorId   INTEGER NOT NULL REFERENCES users(id),
+  qty        INTEGER NOT NULL,
+  reason     TEXT,
+  status     TEXT    NOT NULL DEFAULT 'pending'
+             CHECK (status IN ('pending', 'approved', 'rejected')),
+  createdAt  TEXT    NOT NULL DEFAULT (datetime('now'))
+);
+
 CREATE TABLE IF NOT EXISTS messages (
   id         INTEGER PRIMARY KEY AUTOINCREMENT,
   vendorId   INTEGER NOT NULL REFERENCES users(id),

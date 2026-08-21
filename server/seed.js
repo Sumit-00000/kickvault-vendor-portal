@@ -97,6 +97,7 @@ const priceRequest = {
 const runSeed = () => transaction(() => {
   for (const table of [
     'messages',
+    'return_requests',
     'invoice_lines',
     'invoices',
     'mrn_items',

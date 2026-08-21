@@ -9,6 +9,7 @@ const invoicesRoutes = require('./routes/invoices');
 const priceRequestsRoutes = require('./routes/priceRequests');
 const dashboardRoutes = require('./routes/dashboard');
 const chatRoutes = require('./routes/chat');
+const returnRequestsRoutes = require('./routes/returnRequests');
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use(invoicesRoutes);
 app.use(priceRequestsRoutes);
 app.use(dashboardRoutes);
 app.use(chatRoutes);
+app.use(returnRequestsRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ error: 'Not found' });

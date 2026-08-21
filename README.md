@@ -165,6 +165,8 @@ Price reqs  POST /price-requests (vendor) · GET /price-requests
             POST /admin/price-requests/:id/respond   { action: approve | reject }
 Chat        GET/POST /chat/:vendorId/messages        per-vendor thread; vendors
                                                      reach only their own thread
+Returns     POST /return-requests (vendor) · GET /return-requests
+            POST /admin/return-requests/:id/respond  { action: approve | reject }
 Dashboards  GET /dashboard/vendor · GET /dashboard/admin
 Misc        GET /admin/vendors (admin) · GET /health
 ```
@@ -228,14 +230,18 @@ timestamp — no signature provider.
   admin *Chat* page. The thread polls every 5 seconds — deliberately no
   websocket infrastructure, per the brief's "keep it simple" guidance.
 
+- **Return requests** — a vendor raises a return for one of their listings
+  (quantity + optional reason); the admin approves or rejects it. Responding
+  changes only the request status — the assignment specifies no further
+  effect.
+
 The mock `stock_sync.csv` from the brief is included at
 `server/data/stock_sync.csv`, ready for the scheduled-sync bonus.
 
 ## 16. Known limitations / unimplemented bonus features
 
-- Bonus features not implemented: return requests, notifications, scheduled
-  stock/sold sync (`POST /cron/sync`), payment summary, document upload,
-  live deploy.
+- Bonus features not implemented: notifications, scheduled stock/sold sync
+  (`POST /cron/sync`), payment summary, document upload, live deploy.
 - Chat updates by polling (5s), so messages can take a few seconds to appear
   on the other side.
 - JWTs are stateless with a 12h expiry; there is no refresh token or logout
