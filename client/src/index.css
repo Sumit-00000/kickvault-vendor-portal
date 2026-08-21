@@ -245,3 +245,26 @@ textarea:focus {
   background: var(--accent);
   color: var(--accent-ink);
 }
+
+.auth-subtitle {
+  margin: 0 0 1rem;
+  font-size: 1.02rem;
+  text-align: center;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.auth-alt {
+  margin: 1rem 0 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.success {
+  color: #15803d;
+}
+
+.page-narrow {
+  max-width: 560px;
+}

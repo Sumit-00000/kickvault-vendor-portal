@@ -53,6 +53,17 @@ export function AuthProvider({ children }) {
     return data.user
   }
 
+  async function register(payload) {
+    const data = await apiFetch('/auth/vendor/register', {
+      method: 'POST',
+      body: payload,
+    })
+    localStorage.setItem(TOKEN_KEY, data.token)
+    setUser(data.user)
+    setToken(data.token)
+    return data.user
+  }
+
   function logout() {
     localStorage.removeItem(TOKEN_KEY)
     setToken(null)
@@ -64,7 +75,9 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ token, user, loading, login, logout, setCurrentUser }}>
+    <AuthContext.Provider
+      value={{ token, user, loading, login, register, logout, setCurrentUser }}
+    >
       {children}
     </AuthContext.Provider>
   )

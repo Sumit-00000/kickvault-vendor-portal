@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth'
 
 export default function Login() {
@@ -77,6 +77,9 @@ export default function Login() {
             {busy ? 'Signing in…' : `Sign in as ${role}`}
           </button>
         </form>
+        <p className="auth-alt">
+          New vendor? <Link to="/register">Create an account</Link>
+        </p>
       </div>
     </div>
   )

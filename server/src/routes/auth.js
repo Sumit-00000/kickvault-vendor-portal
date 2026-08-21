@@ -48,6 +48,53 @@ function login(role) {
   };
 }
 
+// Vendor registration — new vendors start in `pending_kyc` and become
+// `active` via the mock KYC step (POST /kyc/verify).
+router.post('/auth/vendor/register', (req, res) => {
+  const { name, email, password, businessName, pan } = req.body || {};
+
+  const fields = { name, email, password, businessName, pan };
+  for (const [key, value] of Object.entries(fields)) {
+    if (typeof value !== 'string' || !value.trim()) {
+      return res.status(400).json({ error: `${key} is required` });
+    }
+  }
+  const normalizedEmail = email.trim().toLowerCase();
+  if (!/^\S+@\S+\.\S+$/.test(normalizedEmail)) {
+    return res.status(400).json({ error: 'A valid email is required' });
+  }
+  if (password.length < 8) {
+    return res
+      .status(400)
+      .json({ error: 'Password must be at least 8 characters' });
+  }
+
+  const existing = db
+    .prepare('SELECT id FROM users WHERE email = ?')
+    .get(normalizedEmail);
+  if (existing) {
+    return res.status(409).json({ error: 'Email is already registered' });
+  }
+
+  const info = db
+    .prepare(
+      `INSERT INTO users (role, email, name, passwordHash, businessName, pan, status)
+       VALUES ('vendor', ?, ?, ?, ?, ?, 'pending_kyc')`
+    )
+    .run(
+      normalizedEmail,
+      name.trim(),
+      bcrypt.hashSync(password, 10),
+      businessName.trim(),
+      pan.trim()
+    );
+
+  const user = db
+    .prepare('SELECT * FROM users WHERE id = ?')
+    .get(info.lastInsertRowid);
+  res.status(201).json({ token: issueToken(user), user: publicUser(user) });
+});
+
 router.post('/auth/vendor/login', loginLimiter, login('vendor'));
 router.post('/auth/admin/login', loginLimiter, login('admin'));
 

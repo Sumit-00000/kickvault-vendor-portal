@@ -2,7 +2,9 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { useAuth } from './auth'
 import RequireRole from './components/RequireRole'
 import Login from './pages/Login'
+import Register from './pages/Register'
 import VendorDashboard from './pages/vendor/VendorDashboard'
+import VendorKyc from './pages/vendor/VendorKyc'
 import AdminDashboard from './pages/admin/AdminDashboard'
 
 function HomeRedirect() {
@@ -16,9 +18,11 @@ export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
 
       <Route element={<RequireRole role="vendor" />}>
         <Route path="/vendor" element={<VendorDashboard />} />
+        <Route path="/vendor/kyc" element={<VendorKyc />} />
       </Route>
 
       <Route element={<RequireRole role="admin" />}>

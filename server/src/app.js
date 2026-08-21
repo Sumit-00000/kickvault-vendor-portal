@@ -1,5 +1,6 @@
 const express = require('express');
 const authRoutes = require('./routes/auth');
+const kycRoutes = require('./routes/kyc');
 
 const app = express();
 
@@ -15,8 +16,9 @@ app.get('/health', (req, res) => {
 });
 
 app.use(authRoutes);
+app.use(kycRoutes);
 // Feature routes are mounted here as they are implemented
-// (kyc, shoes, mrn, invoices, price-requests, dashboards).
+// (shoes, mrn, invoices, price-requests, dashboards).
 
 // 404 for unknown routes
 app.use((req, res) => {
