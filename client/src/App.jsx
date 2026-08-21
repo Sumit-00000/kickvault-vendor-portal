@@ -9,11 +9,13 @@ import VendorListings from './pages/vendor/VendorListings'
 import VendorMrns from './pages/vendor/VendorMrns'
 import VendorInvoices from './pages/vendor/VendorInvoices'
 import VendorPriceRequests from './pages/vendor/VendorPriceRequests'
+import VendorChat from './pages/vendor/VendorChat'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminInventory from './pages/admin/AdminInventory'
 import AdminMrns from './pages/admin/AdminMrns'
 import AdminInvoices from './pages/admin/AdminInvoices'
 import AdminPriceRequests from './pages/admin/AdminPriceRequests'
+import AdminChat from './pages/admin/AdminChat'
 
 function HomeRedirect() {
   const { user, loading } = useAuth()
@@ -35,6 +37,7 @@ export default function App() {
         <Route path="/vendor/mrns" element={<VendorMrns />} />
         <Route path="/vendor/invoices" element={<VendorInvoices />} />
         <Route path="/vendor/price-requests" element={<VendorPriceRequests />} />
+        <Route path="/vendor/chat" element={<VendorChat />} />
       </Route>
 
       <Route element={<RequireRole role="admin" />}>
@@ -43,6 +46,7 @@ export default function App() {
         <Route path="/admin/mrns" element={<AdminMrns />} />
         <Route path="/admin/invoices" element={<AdminInvoices />} />
         <Route path="/admin/price-requests" element={<AdminPriceRequests />} />
+        <Route path="/admin/chat" element={<AdminChat />} />
       </Route>
 
       <Route path="*" element={<HomeRedirect />} />

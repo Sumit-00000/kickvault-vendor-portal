@@ -8,6 +8,7 @@ const mrnRoutes = require('./routes/mrn');
 const invoicesRoutes = require('./routes/invoices');
 const priceRequestsRoutes = require('./routes/priceRequests');
 const dashboardRoutes = require('./routes/dashboard');
+const chatRoutes = require('./routes/chat');
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use(mrnRoutes);
 app.use(invoicesRoutes);
 app.use(priceRequestsRoutes);
 app.use(dashboardRoutes);
+app.use(chatRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ error: 'Not found' });

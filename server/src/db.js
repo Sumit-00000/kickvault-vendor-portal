@@ -82,6 +82,14 @@ CREATE TABLE IF NOT EXISTS price_requests (
                   CHECK (status IN ('pending', 'approved', 'rejected')),
   createdAt       TEXT    NOT NULL DEFAULT (datetime('now'))
 );
+
+CREATE TABLE IF NOT EXISTS messages (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  vendorId   INTEGER NOT NULL REFERENCES users(id),
+  senderId   INTEGER NOT NULL REFERENCES users(id),
+  body       TEXT    NOT NULL,
+  createdAt  TEXT    NOT NULL DEFAULT (datetime('now'))
+);
 `);
 
 function transaction(fn) {

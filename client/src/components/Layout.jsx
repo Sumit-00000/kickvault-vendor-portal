@@ -8,6 +8,7 @@ const NAV = {
     { to: '/vendor/mrns', label: 'MRNs' },
     { to: '/vendor/invoices', label: 'Invoices' },
     { to: '/vendor/price-requests', label: 'Price requests' },
+    { to: '/vendor/chat', label: 'Chat' },
     { to: '/vendor/kyc', label: 'KYC' },
   ],
   admin: [
@@ -16,6 +17,7 @@ const NAV = {
     { to: '/admin/mrns', label: 'MRNs' },
     { to: '/admin/invoices', label: 'Invoices' },
     { to: '/admin/price-requests', label: 'Price requests' },
+    { to: '/admin/chat', label: 'Chat' },
   ],
 }
 
