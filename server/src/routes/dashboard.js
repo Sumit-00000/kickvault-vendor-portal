@@ -4,12 +4,6 @@ const { requireAuth, requireRole } = require('../middleware/auth');
 
 const router = express.Router();
 
-// Dashboard metrics are computed from real application data (no fabricated
-// numbers). Definitions, documented in the README:
-// - sold count / sold value derive from invoice lines of non-cancelled invoices
-// - pending payments = net payable (gross minus commission) of the vendor's
-//   draft + sent invoices
-
 router.get('/dashboard/vendor', requireAuth, requireRole('vendor'), (req, res) => {
   const shoes = db
     .prepare('SELECT * FROM shoes WHERE vendorId = ? ORDER BY id')
@@ -62,7 +56,6 @@ router.get('/dashboard/admin', requireAuth, requireRole('admin'), (req, res) => 
     )
     .get().v;
 
-  // Chart series: sold value over time (grouped by invoice date).
   const soldOverTime = db
     .prepare(
       `SELECT date(i.createdAt) AS day,

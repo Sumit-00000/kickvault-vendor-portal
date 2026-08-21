@@ -10,9 +10,6 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(() => !!localStorage.getItem(TOKEN_KEY))
 
-  // Restore the session from a stored token on page load. Skipped when the
-  // user is already in state (e.g. right after login). The token is only
-  // discarded on a real 401 — transient network failures don't log users out.
   useEffect(() => {
     if (!token) {
       setUser(null)

@@ -1,10 +1,7 @@
-// Seed script — loads the exact dummy data supplied by the assignment so
-// reviewers can log in and click around immediately. Idempotent: re-running
-// clears all tables and re-inserts the dummy data.
 const bcrypt = require('bcryptjs');
 const { db, transaction } = require('./src/db');
 
-const PASSWORD = 'Passw0rd!'; // dummy password from the assignment brief
+const PASSWORD = 'Passw0rd!';
 
 const users = [
   { role: 'admin', email: 'admin@kickvault.test', name: 'Admin User' },
@@ -98,7 +95,6 @@ const priceRequest = {
 };
 
 const runSeed = () => transaction(() => {
-  // Clear tables in FK-safe order
   for (const table of [
     'invoice_lines',
     'invoices',
@@ -110,7 +106,6 @@ const runSeed = () => transaction(() => {
   ]) {
     db.prepare(`DELETE FROM ${table}`).run();
   }
-  // Reset AUTOINCREMENT counters so seeded ids are deterministic across runs.
   db.prepare("DELETE FROM sqlite_sequence WHERE name IN ('users','mrn_items','invoice_lines')").run();
 
   const passwordHash = bcrypt.hashSync(PASSWORD, 10);
@@ -187,7 +182,6 @@ const runSeed = () => transaction(() => {
   );
 });
 
-// Runs directly via `npm run seed`; exported for the automated tests.
 if (require.main === module) {
   runSeed();
   console.log('Seed complete. Test logins (password for all: Passw0rd!):');

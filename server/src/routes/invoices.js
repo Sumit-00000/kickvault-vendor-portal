@@ -18,8 +18,6 @@ function getLines(invoiceId) {
     .all(invoiceId);
 }
 
-// Totals: gross = sum(qtySold x unitPrice); commission = gross x pct/100;
-// net = gross - commission (what is payable to the vendor).
 function computeTotals(lines, commissionPct) {
   const gross = lines.reduce((sum, l) => sum + l.qtySold * l.unitPrice, 0);
   const commission = Math.round(gross * (commissionPct / 100) * 100) / 100;
@@ -54,7 +52,6 @@ function findInvoice(req, res) {
   return invoice;
 }
 
-// Admin generates an invoice for a vendor's sold items.
 router.post('/invoices', requireAuth, requireRole('admin'), (req, res) => {
   const { vendorId, commissionPct, lines } = req.body || {};
 
@@ -122,7 +119,6 @@ router.post('/invoices', requireAuth, requireRole('admin'), (req, res) => {
   res.status(201).json({ invoice: withDetails(invoice) });
 });
 
-// Role-scoped invoice list (vendor: own, admin: all).
 router.get('/invoices', requireAuth, (req, res) => {
   const base = `SELECT i.*, u.name AS vendorName, u.businessName
                 FROM invoices i JOIN users u ON u.id = i.vendorId`;
@@ -141,7 +137,6 @@ router.get('/invoices/:id', requireAuth, (req, res) => {
   res.json({ invoice: withDetails(invoice) });
 });
 
-// Lifecycle from the assignment: draft -> sent -> cancelled.
 router.post(
   '/invoices/:id/send',
   requireAuth,
@@ -184,7 +179,6 @@ router.post(
   }
 );
 
-// Downloadable invoice PDF (owner vendor or admin).
 router.get('/invoices/:id/pdf', requireAuth, (req, res) => {
   const invoice = findInvoice(req, res);
   if (!invoice) return;

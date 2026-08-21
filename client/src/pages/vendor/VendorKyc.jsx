@@ -5,7 +5,7 @@ import { useAuth } from '../../auth'
 export default function VendorKyc() {
   const { user, token, setCurrentUser } = useAuth()
   const [pan, setPan] = useState(user.pan || '')
-  const [result, setResult] = useState(null) // { verified: boolean }
+  const [result, setResult] = useState(null)
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
 

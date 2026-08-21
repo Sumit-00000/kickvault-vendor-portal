@@ -16,7 +16,7 @@ test('seeded invoice computes the assignment totals', async () => {
   const inv = res.body.invoices.find((i) => i.id === 'INV-3001');
   assert.equal(inv.status, 'draft');
   assert.equal(inv.totals.gross, 17500);
-  assert.equal(inv.totals.commission, 2100); // 12%
+  assert.equal(inv.totals.commission, 2100);
   assert.equal(inv.totals.net, 15400);
 });
 

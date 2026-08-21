@@ -11,7 +11,6 @@ const DETAIL_SELECT = `
   JOIN shoes s ON s.id = pr.shoeId
   JOIN users u ON u.id = pr.vendorId`;
 
-// Vendor requests a new price for one of their own listings.
 router.post('/price-requests', requireAuth, requireRole('vendor'), (req, res) => {
   const { shoeId, requestedPrice } = req.body || {};
 
@@ -41,7 +40,6 @@ router.post('/price-requests', requireAuth, requireRole('vendor'), (req, res) =>
   res.status(201).json({ request });
 });
 
-// Role-scoped list (vendor: own, admin: all).
 router.get('/price-requests', requireAuth, (req, res) => {
   const requests =
     req.user.role === 'admin'
@@ -52,8 +50,6 @@ router.get('/price-requests', requireAuth, (req, res) => {
   res.json({ requests });
 });
 
-// Admin responds: approve updates the listing's admin price to the requested
-// price; reject leaves the approved price unchanged (assignment behavior).
 router.post(
   '/admin/price-requests/:id/respond',
   requireAuth,

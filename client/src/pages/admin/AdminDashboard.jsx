@@ -11,8 +11,6 @@ import {
 import { apiFetch } from '../../api'
 import { useAuth } from '../../auth'
 
-// Single series — validated categorical slot-1 blue; identity is carried by
-// the section title, so no legend is needed.
 const SERIES_COLOR = '#2a78d6'
 
 export default function AdminDashboard() {

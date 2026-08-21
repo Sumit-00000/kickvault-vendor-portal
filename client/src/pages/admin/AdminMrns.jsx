@@ -10,7 +10,6 @@ export default function AdminMrns() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
-  // Create form state
   const [formOpen, setFormOpen] = useState(false)
   const [vendorId, setVendorId] = useState('')
   const [items, setItems] = useState([{ sku: '', qty: 1 }])
@@ -36,7 +35,6 @@ export default function AdminMrns() {
 
   useEffect(() => {
     load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const vendorSkus = shoes.filter((s) => String(s.vendorId) === String(vendorId))

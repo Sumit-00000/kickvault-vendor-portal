@@ -16,7 +16,6 @@ export default function Register() {
   const [busy, setBusy] = useState(false)
 
   if (user) {
-    // Fresh registrations are pending_kyc — take them to the KYC step.
     const home =
       user.role === 'admin'
         ? '/admin'
@@ -36,8 +35,6 @@ export default function Register() {
     setBusy(true)
     try {
       await register(form)
-      // New vendors start in pending_kyc; the redirect above also covers the
-      // re-render race, but navigate explicitly for clarity.
       navigate('/vendor/kyc', { replace: true })
     } catch (err) {
       setError(err.message)

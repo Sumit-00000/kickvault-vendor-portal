@@ -13,8 +13,8 @@ test('vendor dashboard: inventory, sold count, pending payments', async () => {
   const res = await request(app).get('/dashboard/vendor').set(auth(vendor1));
   assert.equal(res.status, 200);
   assert.equal(res.body.shoes.length, 2);
-  assert.equal(res.body.soldCount, 1); // INV-3001 line qtySold 1
-  assert.equal(res.body.pendingPayments, 15400); // 17500 - 12%
+  assert.equal(res.body.soldCount, 1);
+  assert.equal(res.body.pendingPayments, 15400);
 });
 
 test('admin dashboard: totals and chart series from real data', async () => {

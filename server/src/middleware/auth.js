@@ -2,8 +2,6 @@ const jwt = require('jsonwebtoken');
 const config = require('../config');
 const { db } = require('../db');
 
-// Verifies the Bearer JWT and attaches the current user (sans passwordHash)
-// to req.user. 401 on any failure — the response never says why.
 function requireAuth(req, res, next) {
   const header = req.headers.authorization || '';
   const token = header.startsWith('Bearer ') ? header.slice(7) : null;
@@ -32,8 +30,6 @@ function requireAuth(req, res, next) {
   next();
 }
 
-// Role guard — use after requireAuth. Vendors can never reach admin routes
-// and vice versa.
 function requireRole(role) {
   return (req, res, next) => {
     if (!req.user) {

@@ -73,7 +73,6 @@ export default function VendorMrns() {
 
   useEffect(() => {
     load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   async function download(mrn) {

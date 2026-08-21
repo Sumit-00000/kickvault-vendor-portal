@@ -1,7 +1,6 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth'
 
-// Nav links per role — more are added as features are implemented.
 const NAV = {
   vendor: [
     { to: '/vendor', label: 'Dashboard', end: true },

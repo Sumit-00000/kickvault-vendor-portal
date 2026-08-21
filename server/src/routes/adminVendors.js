@@ -4,7 +4,6 @@ const { requireAuth, requireRole } = require('../middleware/auth');
 
 const router = express.Router();
 
-// Vendor list for admin screens (MRN/invoice creation, dashboard counts).
 router.get('/admin/vendors', requireAuth, requireRole('admin'), (req, res) => {
   const vendors = db
     .prepare(

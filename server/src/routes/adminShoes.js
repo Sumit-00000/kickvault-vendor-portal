@@ -4,8 +4,6 @@ const { requireAuth, requireRole } = require('../middleware/auth');
 
 const router = express.Router();
 
-// Listing statuses come verbatim from the assignment:
-// submitted -> priced -> live -> sold / returned
 const SHOE_STATUSES = ['submitted', 'priced', 'live', 'sold', 'returned'];
 
 function findShoe(req, res) {
@@ -19,7 +17,6 @@ function findShoe(req, res) {
   return shoe;
 }
 
-// Admin sets the admin-approved price for a listing.
 router.post(
   '/admin/shoes/:id/price',
   requireAuth,
@@ -45,8 +42,6 @@ router.post(
   }
 );
 
-// Admin changes a listing's status (validated against the assignment's
-// status set).
 router.post(
   '/admin/shoes/:id/status',
   requireAuth,

@@ -6,7 +6,6 @@ const { sendMrnPdf } = require('../services/pdf');
 const router = express.Router();
 
 function getItems(mrnId) {
-  // Item details are joined against the vendor's listings by SKU for display.
   return db
     .prepare(
       `SELECT mi.sku, mi.qty, s.brand, s.model
@@ -23,8 +22,6 @@ function withItems(mrn) {
   return { ...mrn, items: getItems(mrn.id) };
 }
 
-// Loads an MRN, enforcing access: admins see all, vendors only their own
-// (missing and not-owned both look like 404).
 function findMrn(req, res) {
   const mrn = db
     .prepare(
@@ -40,7 +37,6 @@ function findMrn(req, res) {
   return mrn;
 }
 
-// Admin creates an MRN listing received items for a vendor.
 router.post('/mrn', requireAuth, requireRole('admin'), (req, res) => {
   const { vendorId, items } = req.body || {};
 
@@ -95,7 +91,6 @@ router.post('/mrn', requireAuth, requireRole('admin'), (req, res) => {
   res.status(201).json({ mrn: withItems(mrn) });
 });
 
-// Role-scoped MRN list (vendor: own, admin: all).
 router.get('/mrn', requireAuth, (req, res) => {
   const base = `SELECT m.*, u.name AS vendorName, u.businessName
                 FROM mrns m JOIN users u ON u.id = m.vendorId`;
@@ -112,8 +107,6 @@ router.get('/mrn/:id', requireAuth, (req, res) => {
   res.json({ mrn: withItems(mrn) });
 });
 
-// Vendor signs the MRN — e-signature is checkbox + name + timestamp
-// (assignment-specified; no external signature provider).
 router.post('/mrn/:id/sign', requireAuth, requireRole('vendor'), (req, res) => {
   const mrn = findMrn(req, res);
   if (!mrn) return;
@@ -141,7 +134,6 @@ router.post('/mrn/:id/sign', requireAuth, requireRole('vendor'), (req, res) => {
   res.json({ mrn: withItems(updated) });
 });
 
-// Downloadable PDF of the signed MRN.
 router.get('/mrn/:id/pdf', requireAuth, (req, res) => {
   const mrn = findMrn(req, res);
   if (!mrn) return;

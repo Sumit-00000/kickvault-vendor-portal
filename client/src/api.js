@@ -1,5 +1,3 @@
-// Minimal fetch wrapper for the KickVault API.
-// In dev, Vite proxies /api/* to the Express server (see vite.config.js).
 export async function apiFetch(
   path,
   { method = 'GET', body, bodyRaw, contentType, token } = {},
@@ -24,8 +22,6 @@ export async function apiFetch(
   return data
 }
 
-// Downloads an authenticated file (e.g. a PDF) and saves it via a temporary
-// object URL — needed because plain links can't carry the Bearer token.
 export async function apiDownload(path, token, filename) {
   const res = await fetch(`/api${path}`, {
     headers: { Authorization: `Bearer ${token}` },

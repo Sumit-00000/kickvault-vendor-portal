@@ -40,7 +40,6 @@ test('lists are role-scoped', async () => {
 });
 
 test('approve updates the listing admin price; reject leaves it unchanged', async () => {
-  // Approve seeded PR-4001 (SHOE-1003: 9500 -> 10500)
   const approved = await request(app)
     .post('/admin/price-requests/PR-4001/respond')
     .set(auth(admin))
@@ -50,14 +49,12 @@ test('approve updates the listing admin price; reject leaves it unchanged', asyn
   const shoes = await request(app).get('/shoes').set(auth(admin));
   assert.equal(shoes.body.shoes.find((s) => s.id === 'SHOE-1003').adminPrice, 10500);
 
-  // Responding twice is refused
   const again = await request(app)
     .post('/admin/price-requests/PR-4001/respond')
     .set(auth(admin))
     .send({ action: 'reject' });
   assert.equal(again.status, 400);
 
-  // Reject PR-4002 (SHOE-1001 requested 18000) — price stays 17500
   const rejected = await request(app)
     .post('/admin/price-requests/PR-4002/respond')
     .set(auth(admin))

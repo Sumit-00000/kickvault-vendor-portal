@@ -19,14 +19,12 @@ export default function VendorListings() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
-  // Create/edit form
   const [formOpen, setFormOpen] = useState(false)
   const [editingId, setEditingId] = useState(null)
   const [form, setForm] = useState(EMPTY_FORM)
   const [formError, setFormError] = useState('')
   const [busy, setBusy] = useState(false)
 
-  // Delete confirmation + bulk upload feedback
   const [confirmDeleteId, setConfirmDeleteId] = useState(null)
   const [bulkResult, setBulkResult] = useState(null)
   const fileRef = useRef(null)
@@ -44,7 +42,6 @@ export default function VendorListings() {
 
   useEffect(() => {
     load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   function openCreate() {

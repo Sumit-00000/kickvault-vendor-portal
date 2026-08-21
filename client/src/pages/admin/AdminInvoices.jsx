@@ -10,7 +10,6 @@ export default function AdminInvoices() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
-  // Create form
   const [formOpen, setFormOpen] = useState(false)
   const [vendorId, setVendorId] = useState('')
   const [commissionPct, setCommissionPct] = useState('12')
@@ -37,7 +36,6 @@ export default function AdminInvoices() {
 
   useEffect(() => {
     load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const vendorShoes = shoes.filter((s) => String(s.vendorId) === String(vendorId))
@@ -47,7 +45,6 @@ export default function AdminInvoices() {
       list.map((l, idx) => {
         if (idx !== i) return l
         const next = { ...l, [key]: value }
-        // Prefill unit price with the admin price (or asking price) of the SKU
         if (key === 'sku') {
           const shoe = vendorShoes.find((s) => s.sku === value)
           if (shoe) next.unitPrice = String(shoe.adminPrice ?? shoe.askingPrice)

@@ -22,9 +22,6 @@ function publicUser(user) {
   return rest;
 }
 
-// Shared login handler; separate vendor/admin endpoints per the assignment.
-// The same "Invalid credentials" response covers unknown email, wrong
-// password, and wrong role — no information leaks.
 function login(role) {
   return (req, res) => {
     const { email, password } = req.body || {};
@@ -48,8 +45,6 @@ function login(role) {
   };
 }
 
-// Vendor registration — new vendors start in `pending_kyc` and become
-// `active` via the mock KYC step (POST /kyc/verify).
 router.post('/auth/vendor/register', (req, res) => {
   const { name, email, password, businessName, pan } = req.body || {};
 

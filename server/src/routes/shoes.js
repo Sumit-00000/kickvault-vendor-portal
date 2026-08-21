@@ -7,8 +7,6 @@ const router = express.Router();
 
 const TEXT_FIELDS = ['brand', 'model', 'size', 'sku', 'condition'];
 
-// Validates listing input. In partial mode (PATCH) missing fields are
-// allowed; provided fields are always validated.
 function validateShoeInput(input, { partial = false } = {}) {
   const errors = [];
   const value = {};
@@ -70,8 +68,6 @@ function insertShoe(vendorId, value) {
   return db.prepare('SELECT * FROM shoes WHERE id = ?').get(id);
 }
 
-// Vendors see their own listings; admins see all vendor inventory
-// (with vendor identity for review).
 router.get('/shoes', requireAuth, (req, res) => {
   if (req.user.role === 'admin') {
     const shoes = db
@@ -98,11 +94,6 @@ router.post('/shoes', requireAuth, requireRole('vendor'), (req, res) => {
   res.status(201).json({ shoe });
 });
 
-// Bulk upload — accepts a JSON array (Content-Type: application/json) or
-// CSV text (Content-Type: text/csv) with a header row:
-//   brand,model,size,sku,condition,askingPrice,qty
-// All-or-nothing: if any row fails validation, nothing is inserted and the
-// row errors are reported.
 router.post('/shoes/bulk', requireAuth, requireRole('vendor'), (req, res) => {
   let items;
   if (typeof req.body === 'string') {
@@ -144,8 +135,6 @@ router.post('/shoes/bulk', requireAuth, requireRole('vendor'), (req, res) => {
   res.status(201).json({ created: shoes.length, shoes });
 });
 
-// Loads a listing only if it belongs to the requesting vendor — other
-// vendors' listings look like 404s (no information leak).
 function findOwnShoe(req, res) {
   const shoe = db
     .prepare('SELECT * FROM shoes WHERE id = ? AND vendorId = ?')

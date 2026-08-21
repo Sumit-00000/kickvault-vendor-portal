@@ -1,6 +1,3 @@
-// Small CSV parser (header row + records). Handles quoted fields and
-// escaped quotes; enough for the bulk-upload and stock-sync CSVs — no
-// external dependency needed.
 function parseCsv(text) {
   const rows = [];
   let row = [];
@@ -12,7 +9,6 @@ function parseCsv(text) {
     field = '';
   };
   const pushRow = () => {
-    // Skip completely empty lines
     if (row.length > 1 || row[0].trim() !== '') rows.push(row);
     row = [];
   };

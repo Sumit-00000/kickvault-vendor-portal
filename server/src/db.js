@@ -1,6 +1,3 @@
-// Database: SQLite via Node's built-in `node:sqlite` module (Node 22.13+).
-// Chosen over native-addon SQLite drivers so reviewers need no C++ build
-// toolchain — `npm install` has zero native compilation steps.
 const fs = require('fs');
 const path = require('path');
 const { DatabaseSync } = require('node:sqlite');
@@ -12,12 +9,6 @@ const db = new DatabaseSync(config.databasePath);
 db.exec('PRAGMA journal_mode = WAL;');
 db.exec('PRAGMA foreign_keys = ON;');
 
-// Statuses and lifecycles come verbatim from the assignment:
-//   vendor:  pending_kyc -> active
-//   shoe:    submitted -> priced -> live -> sold / returned
-//   mrn:     awaiting_signature -> signed (signing stores signedBy + signedAt)
-//   invoice: draft -> sent -> cancelled
-//   price request: pending -> approved / rejected
 db.exec(`
 CREATE TABLE IF NOT EXISTS users (
   id            INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -93,7 +84,6 @@ CREATE TABLE IF NOT EXISTS price_requests (
 );
 `);
 
-// Runs `fn` inside a SQL transaction, rolling back on any error.
 function transaction(fn) {
   db.exec('BEGIN');
   try {
@@ -106,15 +96,12 @@ function transaction(fn) {
   }
 }
 
-// Generates the next human-readable id for a table whose ids look like
-// "SHOE-1001" / "MRN-2001" / "INV-3001" / "PR-4001", continuing the dummy-data
-// sequences. `start` is used when the table is empty.
 function nextId(table, prefix, start) {
   const row = db
     .prepare(
       `SELECT MAX(CAST(substr(id, ?) AS INTEGER)) AS maxNum FROM ${table}`
     )
-    .get(prefix.length + 2); // skip "PREFIX-"
+    .get(prefix.length + 2);
   const num = row && row.maxNum ? row.maxNum + 1 : start;
   return `${prefix}-${num}`;
 }

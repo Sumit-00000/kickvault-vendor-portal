@@ -10,7 +10,6 @@ export default function AdminInventory() {
   const [shoes, setShoes] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  // Per-row draft price inputs, keyed by shoe id
   const [priceDrafts, setPriceDrafts] = useState({})
   const [busyId, setBusyId] = useState(null)
 
@@ -27,7 +26,6 @@ export default function AdminInventory() {
 
   useEffect(() => {
     load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   async function savePrice(shoe) {

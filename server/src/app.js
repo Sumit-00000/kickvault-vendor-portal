@@ -11,13 +11,10 @@ const dashboardRoutes = require('./routes/dashboard');
 
 const app = express();
 
-// Only the local dev proxy (Vite) sits in front of the API; trusting loopback
-// lets express-rate-limit key on the real client IP without trusting
-// arbitrary X-Forwarded-For headers.
 app.set('trust proxy', 'loopback');
 
 app.use(express.json());
-app.use(express.text({ type: 'text/csv', limit: '1mb' })); // CSV bulk upload
+app.use(express.text({ type: 'text/csv', limit: '1mb' }));
 
 app.get('/health', (req, res) => {
   res.json({ ok: true });
@@ -33,13 +30,10 @@ app.use(invoicesRoutes);
 app.use(priceRequestsRoutes);
 app.use(dashboardRoutes);
 
-// 404 for unknown routes
 app.use((req, res) => {
   res.status(404).json({ error: 'Not found' });
 });
 
-// Central error handler — never leaks stack traces or internals to clients.
-// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   console.error(err);
   const status = err.statusCode || 500;

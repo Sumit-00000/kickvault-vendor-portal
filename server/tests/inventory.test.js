@@ -37,14 +37,12 @@ test('vendor CRUD with ownership enforcement', async () => {
   assert.equal(created.body.shoe.adminPrice, null);
   const id = created.body.shoe.id;
 
-  // Update own listing
   const patched = await request(app)
     .patch(`/shoes/${id}`)
     .set(auth(vendor1))
     .send({ askingPrice: 8499 });
   assert.equal(patched.body.shoe.askingPrice, 8499);
 
-  // Another vendor cannot see, edit, or delete it
   assert.equal(
     (await request(app).patch(`/shoes/${id}`).set(auth(vendor2)).send({ qty: 1 })).status,
     404
@@ -54,14 +52,12 @@ test('vendor CRUD with ownership enforcement', async () => {
     404
   );
 
-  // Vendor cannot set status/adminPrice via PATCH
   const noFields = await request(app)
     .patch(`/shoes/${id}`)
     .set(auth(vendor1))
     .send({ status: 'live', adminPrice: 1 });
   assert.equal(noFields.status, 400);
 
-  // Delete own listing
   const del = await request(app).delete(`/shoes/${id}`).set(auth(vendor1));
   assert.equal(del.status, 200);
 });
@@ -110,7 +106,7 @@ test('bulk upload accepts JSON and CSV; bad rows insert nothing', async () => {
   assert.equal(bad.status, 400);
   assert.equal(bad.body.rowErrors.length, 1);
   const after = (await request(app).get('/shoes').set(auth(vendor2))).body.shoes.length;
-  assert.equal(after, before); // all-or-nothing
+  assert.equal(after, before);
 });
 
 test('admin sets price and walks the status lifecycle', async () => {
@@ -140,7 +136,6 @@ test('admin sets price and walks the status lifecycle', async () => {
     .send({ adminPrice: 'free' });
   assert.equal(badPrice.status, 400);
 
-  // Vendor is blocked from admin pricing endpoints
   const blocked = await request(app)
     .post('/admin/shoes/SHOE-1001/price')
     .set(auth(vendor1))

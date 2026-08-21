@@ -49,32 +49,27 @@ test('MRN lists and detail are role-scoped', async () => {
 });
 
 test('signing: checkbox + name + timestamp; PDF only after signing', async () => {
-  // PDF before signing is refused
   const early = await request(app).get('/mrn/MRN-2001/pdf').set(auth(vendor1));
   assert.equal(early.status, 400);
 
-  // Checkbox is mandatory
   const noCheckbox = await request(app)
     .post('/mrn/MRN-2001/sign')
     .set(auth(vendor1))
     .send({ accepted: false, name: 'Vendor One' });
   assert.equal(noCheckbox.status, 400);
 
-  // Cross-vendor signing looks like a 404
   const crossSign = await request(app)
     .post('/mrn/MRN-2001/sign')
     .set(auth(vendor2))
     .send({ accepted: true, name: 'V2' });
   assert.equal(crossSign.status, 404);
 
-  // Admin cannot sign
   const adminSign = await request(app)
     .post('/mrn/MRN-2001/sign')
     .set(auth(admin))
     .send({ accepted: true, name: 'Admin' });
   assert.equal(adminSign.status, 403);
 
-  // Vendor signs
   const signed = await request(app)
     .post('/mrn/MRN-2001/sign')
     .set(auth(vendor1))
@@ -84,14 +79,12 @@ test('signing: checkbox + name + timestamp; PDF only after signing', async () =>
   assert.equal(signed.body.mrn.signedBy, 'Vendor One');
   assert.match(signed.body.mrn.signedAt, /^\d{4}-\d{2}-\d{2}T/);
 
-  // Re-signing is refused
   const again = await request(app)
     .post('/mrn/MRN-2001/sign')
     .set(auth(vendor1))
     .send({ accepted: true, name: 'Vendor One' });
   assert.equal(again.status, 400);
 
-  // Signed MRN downloads as a real PDF (vendor and admin)
   const pdf = await request(app)
     .get('/mrn/MRN-2001/pdf')
     .set(auth(vendor1))

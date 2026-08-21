@@ -1,5 +1,3 @@
-// Shared test setup. MUST be required before ../src/app so the environment
-// points at a throwaway per-process database.
 const os = require('os');
 const path = require('path');
 
@@ -27,7 +25,6 @@ async function login(role, email, password = 'Passw0rd!') {
 
 const auth = (token) => ({ Authorization: `Bearer ${token}` });
 
-// Collects a binary (PDF) response body as a Buffer.
 const binaryParser = (res, cb) => {
   const chunks = [];
   res.on('data', (c) => chunks.push(c));

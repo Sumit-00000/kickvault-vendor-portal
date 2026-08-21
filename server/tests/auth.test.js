@@ -21,7 +21,6 @@ test('invalid credentials and wrong-role logins are rejected identically', async
   assert.equal(wrongPw.status, 401);
   assert.equal(wrongPw.body.error, 'Invalid credentials');
 
-  // Admin account on the vendor endpoint leaks nothing
   const wrongRole = await request(app)
     .post('/auth/vendor/login')
     .send({ email: 'admin@kickvault.test', password: 'Passw0rd!' });
@@ -47,13 +46,11 @@ test('role guards separate vendor and admin', async () => {
   const vendorToken = await login('vendor', 'vendor1@example.test');
   const adminToken = await login('admin', 'admin@kickvault.test');
 
-  // Vendor cannot reach admin functionality
   const blocked = await request(app)
     .get('/admin/vendors')
     .set(auth(vendorToken));
   assert.equal(blocked.status, 403);
 
-  // Admin cannot use vendor-only endpoints
   const alsoBlocked = await request(app)
     .post('/kyc/verify')
     .set(auth(adminToken))
@@ -61,7 +58,6 @@ test('role guards separate vendor and admin', async () => {
   assert.equal(alsoBlocked.status, 403);
 });
 
-// Kept LAST in this file: it exhausts the login rate limit for this process.
 test('login endpoint is rate limited', async () => {
   let limited = null;
   for (let i = 0; i < 15; i++) {

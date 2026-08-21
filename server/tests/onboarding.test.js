@@ -70,7 +70,7 @@ test('mock KYC: invalid PAN stays pending, valid PAN activates', async () => {
 test('seeded pending vendor verifies with the PAN stored at registration', async () => {
   const token = await login('vendor', 'vendor2@example.test');
   const res = await request(app).post('/kyc/verify').set(auth(token)).send({});
-  assert.equal(res.body.verified, true); // ZZZZZ9999Z matches the regex
+  assert.equal(res.body.verified, true);
   assert.equal(res.body.user.status, 'active');
 });
 

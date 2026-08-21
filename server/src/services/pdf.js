@@ -1,8 +1,5 @@
 const PDFDocument = require('pdfkit');
 
-// Local PDF generation with pdfkit — no external document provider
-// (assignment requirement).
-
 const LEFT = 50;
 const RIGHT = 545;
 
@@ -41,7 +38,6 @@ function keyValue(doc, pairs) {
   }
 }
 
-// columns: [{ label, width, align?, key }]
 function table(doc, columns, rows) {
   const startX = LEFT;
   let y = doc.y + 10;
@@ -85,7 +81,6 @@ function startPdfResponse(res, filename) {
   return doc;
 }
 
-// Signed Material Receiving Note PDF: MRN id, vendor, items, signature.
 function sendMrnPdf(res, { mrn, vendor, items }) {
   const doc = startPdfResponse(res, `${mrn.id}.pdf`);
 
@@ -134,8 +129,6 @@ function sendMrnPdf(res, { mrn, vendor, items }) {
   doc.end();
 }
 
-// Invoice PDF: invoice id, vendor, line items (qty sold, unit price),
-// commission percentage, totals, and invoice status.
 function sendInvoicePdf(res, { invoice, vendor, lines, totals }) {
   const doc = startPdfResponse(res, `${invoice.id}.pdf`);
 
