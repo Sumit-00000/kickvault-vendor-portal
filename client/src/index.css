@@ -487,3 +487,22 @@ td select {
 .item-row input {
   width: 5.5rem;
 }
+
+/* ---- invoice status badges (assignment lifecycle) ---- */
+.inv-draft {
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+  color: #475569;
+}
+
+.inv-sent {
+  background: #dbeafe;
+  border-color: #bfdbfe;
+  color: #1e40af;
+}
+
+.inv-cancelled {
+  background: #fee2e2;
+  border-color: #fecaca;
+  color: #991b1b;
+}

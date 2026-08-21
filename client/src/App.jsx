@@ -7,9 +7,11 @@ import VendorDashboard from './pages/vendor/VendorDashboard'
 import VendorKyc from './pages/vendor/VendorKyc'
 import VendorListings from './pages/vendor/VendorListings'
 import VendorMrns from './pages/vendor/VendorMrns'
+import VendorInvoices from './pages/vendor/VendorInvoices'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminInventory from './pages/admin/AdminInventory'
 import AdminMrns from './pages/admin/AdminMrns'
+import AdminInvoices from './pages/admin/AdminInvoices'
 
 function HomeRedirect() {
   const { user, loading } = useAuth()
@@ -29,12 +31,14 @@ export default function App() {
         <Route path="/vendor/kyc" element={<VendorKyc />} />
         <Route path="/vendor/listings" element={<VendorListings />} />
         <Route path="/vendor/mrns" element={<VendorMrns />} />
+        <Route path="/vendor/invoices" element={<VendorInvoices />} />
       </Route>
 
       <Route element={<RequireRole role="admin" />}>
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/inventory" element={<AdminInventory />} />
         <Route path="/admin/mrns" element={<AdminMrns />} />
+        <Route path="/admin/invoices" element={<AdminInvoices />} />
       </Route>
 
       <Route path="*" element={<HomeRedirect />} />
