@@ -13,8 +13,8 @@ data.
 
 ## Tech stack
 
-- **Backend:** Node.js 18+, Express (REST/JSON API), CommonJS
-- **Database:** SQLite via `better-sqlite3` (file-based — zero setup for reviewers)
+- **Backend:** Node.js 22.13+ (see note below), Express (REST/JSON API), CommonJS
+- **Database:** SQLite via Node's built-in `node:sqlite` module (file-based — zero setup, zero native compilation for reviewers)
 - **Auth:** JWT + bcrypt password hashing (in progress)
 - **Frontend:** React 18 SPA (Vite, react-router)
 - **PDF:** local generation (planned: pdfkit)
@@ -28,7 +28,16 @@ client/   React 18 SPA (Vite dev server proxies /api → backend)
 
 ## Setup
 
-Requires Node.js 18+.
+Requires **Node.js 22.13 or newer** (current LTS or later).
+
+> **Decision/trade-off:** the assignment allows any simple database; SQLite was
+> chosen for zero reviewer setup. The server uses Node's built-in `node:sqlite`
+> module instead of a native-addon driver (e.g. `better-sqlite3`) so that
+> `npm install` never needs a C++ toolchain — native SQLite drivers fail to
+> install on Windows machines without Visual Studio Build Tools. This raises
+> the minimum Node version from 18 to 22.13 (the version where `node:sqlite`
+> became available without a flag). Node may print an "SQLite is an
+> experimental feature" warning on startup; it is harmless.
 
 ```bash
 # 1. Backend

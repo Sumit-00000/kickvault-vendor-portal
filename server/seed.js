@@ -2,7 +2,7 @@
 // reviewers can log in and click around immediately. Idempotent: re-running
 // clears all tables and re-inserts the dummy data.
 const bcrypt = require('bcryptjs');
-const { db } = require('./src/db');
+const { db, transaction } = require('./src/db');
 
 const PASSWORD = 'Passw0rd!'; // dummy password from the assignment brief
 
@@ -97,7 +97,7 @@ const priceRequest = {
   status: 'pending',
 };
 
-const seed = db.transaction(() => {
+transaction(() => {
   // Clear tables in FK-safe order
   for (const table of [
     'invoice_lines',
@@ -135,8 +135,8 @@ const seed = db.transaction(() => {
     VALUES (@id, @vendorId, @brand, @model, @size, @sku, @condition,
             @askingPrice, @adminPrice, @qty, @status)
   `);
-  for (const s of shoes) {
-    insertShoe.run({ ...s, vendorId: idByEmail[s.vendorEmail] });
+  for (const { vendorEmail, ...s } of shoes) {
+    insertShoe.run({ ...s, vendorId: idByEmail[vendorEmail] });
   }
 
   db.prepare(`
@@ -184,8 +184,6 @@ const seed = db.transaction(() => {
     priceRequest.status
   );
 });
-
-seed();
 
 console.log('Seed complete. Test logins (password for all: Passw0rd!):');
 console.log('  admin:  admin@kickvault.test');

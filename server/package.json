@@ -4,6 +4,9 @@
   "private": true,
   "description": "KickVault Vendor Consignment Portal - REST API server",
   "main": "src/index.js",
+  "engines": {
+    "node": ">=22.13"
+  },
   "scripts": {
     "start": "node src/index.js",
     "dev": "node --watch src/index.js",
@@ -12,7 +15,6 @@
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
-    "better-sqlite3": "^13.0.3",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "express-rate-limit": "^8.6.2",

@@ -1,14 +1,22 @@
 const express = require('express');
+const authRoutes = require('./routes/auth');
 
 const app = express();
+
+// Only the local dev proxy (Vite) sits in front of the API; trusting loopback
+// lets express-rate-limit key on the real client IP without trusting
+// arbitrary X-Forwarded-For headers.
+app.set('trust proxy', 'loopback');
+
 app.use(express.json());
 
 app.get('/health', (req, res) => {
   res.json({ ok: true });
 });
 
+app.use(authRoutes);
 // Feature routes are mounted here as they are implemented
-// (auth, kyc, shoes, mrn, invoices, price-requests, dashboards).
+// (kyc, shoes, mrn, invoices, price-requests, dashboards).
 
 // 404 for unknown routes
 app.use((req, res) => {

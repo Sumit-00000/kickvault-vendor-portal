@@ -1,13 +1,16 @@
+// Database: SQLite via Node's built-in `node:sqlite` module (Node 22.13+).
+// Chosen over native-addon SQLite drivers so reviewers need no C++ build
+// toolchain — `npm install` has zero native compilation steps.
 const fs = require('fs');
 const path = require('path');
-const Database = require('better-sqlite3');
+const { DatabaseSync } = require('node:sqlite');
 const config = require('./config');
 
 fs.mkdirSync(path.dirname(config.databasePath), { recursive: true });
 
-const db = new Database(config.databasePath);
-db.pragma('journal_mode = WAL');
-db.pragma('foreign_keys = ON');
+const db = new DatabaseSync(config.databasePath);
+db.exec('PRAGMA journal_mode = WAL;');
+db.exec('PRAGMA foreign_keys = ON;');
 
 // Statuses and lifecycles come verbatim from the assignment:
 //   vendor:  pending_kyc -> active
@@ -90,6 +93,19 @@ CREATE TABLE IF NOT EXISTS price_requests (
 );
 `);
 
+// Runs `fn` inside a SQL transaction, rolling back on any error.
+function transaction(fn) {
+  db.exec('BEGIN');
+  try {
+    const result = fn();
+    db.exec('COMMIT');
+    return result;
+  } catch (err) {
+    db.exec('ROLLBACK');
+    throw err;
+  }
+}
+
 // Generates the next human-readable id for a table whose ids look like
 // "SHOE-1001" / "MRN-2001" / "INV-3001" / "PR-4001", continuing the dummy-data
 // sequences. `start` is used when the table is empty.
@@ -103,4 +119,4 @@ function nextId(table, prefix, start) {
   return `${prefix}-${num}`;
 }
 
-module.exports = { db, nextId };
+module.exports = { db, transaction, nextId };
