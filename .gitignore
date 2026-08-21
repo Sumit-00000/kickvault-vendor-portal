@@ -1,0 +1,15 @@
+node_modules/
+dist/
+
+# environment files — never commit secrets
+.env
+.env.local
+
+# SQLite database files (created by the seed script / app)
+server/data/*.db
+server/data/*.db-journal
+server/data/*.db-wal
+server/data/*.db-shm
+
+# logs
+*.log
