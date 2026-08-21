@@ -8,7 +8,10 @@ const NAV = {
     { to: '/vendor/listings', label: 'Listings' },
     { to: '/vendor/kyc', label: 'KYC' },
   ],
-  admin: [{ to: '/admin', label: 'Dashboard', end: true }],
+  admin: [
+    { to: '/admin', label: 'Dashboard', end: true },
+    { to: '/admin/inventory', label: 'Inventory' },
+  ],
 }
 
 export default function Layout() {

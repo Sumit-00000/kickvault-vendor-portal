@@ -7,6 +7,7 @@ import VendorDashboard from './pages/vendor/VendorDashboard'
 import VendorKyc from './pages/vendor/VendorKyc'
 import VendorListings from './pages/vendor/VendorListings'
 import AdminDashboard from './pages/admin/AdminDashboard'
+import AdminInventory from './pages/admin/AdminInventory'
 
 function HomeRedirect() {
   const { user, loading } = useAuth()
@@ -29,6 +30,7 @@ export default function App() {
 
       <Route element={<RequireRole role="admin" />}>
         <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/inventory" element={<AdminInventory />} />
       </Route>
 
       <Route path="*" element={<HomeRedirect />} />

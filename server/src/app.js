@@ -2,6 +2,7 @@ const express = require('express');
 const authRoutes = require('./routes/auth');
 const kycRoutes = require('./routes/kyc');
 const shoesRoutes = require('./routes/shoes');
+const adminShoesRoutes = require('./routes/adminShoes');
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.get('/health', (req, res) => {
 app.use(authRoutes);
 app.use(kycRoutes);
 app.use(shoesRoutes);
+app.use(adminShoesRoutes);
 // Feature routes are mounted here as they are implemented
 // (mrn, invoices, price-requests, dashboards).
 

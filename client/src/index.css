@@ -398,3 +398,20 @@ th.num {
   border-color: #fecaca;
   color: #991b1b;
 }
+
+.small {
+  font-size: 0.82rem;
+}
+
+.inline-input {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.inline-input input {
+  width: 6.5rem;
+}
+
+td select {
+  width: auto;
+}
