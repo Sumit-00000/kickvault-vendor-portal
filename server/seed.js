@@ -97,7 +97,7 @@ const priceRequest = {
   status: 'pending',
 };
 
-transaction(() => {
+const runSeed = () => transaction(() => {
   // Clear tables in FK-safe order
   for (const table of [
     'invoice_lines',
@@ -187,7 +187,13 @@ transaction(() => {
   );
 });
 
-console.log('Seed complete. Test logins (password for all: Passw0rd!):');
-console.log('  admin:  admin@kickvault.test');
-console.log('  vendor: vendor1@example.test (active)');
-console.log('  vendor: vendor2@example.test (pending_kyc)');
+// Runs directly via `npm run seed`; exported for the automated tests.
+if (require.main === module) {
+  runSeed();
+  console.log('Seed complete. Test logins (password for all: Passw0rd!):');
+  console.log('  admin:  admin@kickvault.test');
+  console.log('  vendor: vendor1@example.test (active)');
+  console.log('  vendor: vendor2@example.test (pending_kyc)');
+}
+
+module.exports = { runSeed };
