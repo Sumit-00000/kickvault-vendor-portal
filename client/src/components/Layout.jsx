@@ -1,5 +1,6 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth'
+import NotificationsBell from './NotificationsBell'
 
 const NAV = {
   vendor: [
@@ -47,6 +48,7 @@ export default function Layout() {
             ))}
           </nav>
           <div className="topbar-user">
+            <NotificationsBell />
             <span className="badge">{user.role}</span>
             <span className="topbar-name">{user.name}</span>
             <button className="btn btn-small" onClick={handleLogout}>

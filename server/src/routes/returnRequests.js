@@ -1,6 +1,7 @@
 const express = require('express');
 const { db, transaction, nextId } = require('../db');
 const { requireAuth, requireRole } = require('../middleware/auth');
+const { notify, notifyAdmins } = require('../services/notify');
 
 const router = express.Router();
 
@@ -38,6 +39,9 @@ router.post('/return-requests', requireAuth, requireRole('vendor'), (req, res) =
     return db.prepare(`${DETAIL_SELECT} WHERE rr.id = ?`).get(id);
   });
 
+  notifyAdmins(
+    `Return request ${request.id}: ${req.user.name} wants to return ${quantity} × ${shoe.sku}`
+  );
   res.status(201).json({ request });
 });
 
@@ -78,6 +82,10 @@ router.post(
     db.prepare('UPDATE return_requests SET status = ? WHERE id = ?').run(
       action === 'approve' ? 'approved' : 'rejected',
       request.id
+    );
+    notify(
+      request.vendorId,
+      `Your return request ${request.id} was ${action === 'approve' ? 'approved' : 'rejected'}`
     );
     res.json({
       request: db.prepare(`${DETAIL_SELECT} WHERE rr.id = ?`).get(request.id),

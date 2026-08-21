@@ -2,6 +2,7 @@ const express = require('express');
 const { db, transaction, nextId } = require('../db');
 const { requireAuth, requireRole } = require('../middleware/auth');
 const { sendMrnPdf } = require('../services/pdf');
+const { notify, notifyAdmins } = require('../services/notify');
 
 const router = express.Router();
 
@@ -88,6 +89,7 @@ router.post('/mrn', requireAuth, requireRole('admin'), (req, res) => {
     return db.prepare('SELECT * FROM mrns WHERE id = ?').get(id);
   });
 
+  notify(vendor.id, `MRN ${mrn.id} was created for you and awaits your signature`);
   res.status(201).json({ mrn: withItems(mrn) });
 });
 
@@ -131,6 +133,7 @@ router.post('/mrn/:id/sign', requireAuth, requireRole('vendor'), (req, res) => {
   ).run(name.trim(), signedAt, mrn.id);
 
   const updated = db.prepare('SELECT * FROM mrns WHERE id = ?').get(mrn.id);
+  notifyAdmins(`MRN ${mrn.id} was signed by ${name.trim()}`);
   res.json({ mrn: withItems(updated) });
 });
 

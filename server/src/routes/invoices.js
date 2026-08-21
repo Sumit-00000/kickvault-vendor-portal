@@ -2,6 +2,7 @@ const express = require('express');
 const { db, transaction, nextId } = require('../db');
 const { requireAuth, requireRole } = require('../middleware/auth');
 const { sendInvoicePdf } = require('../services/pdf');
+const { notify } = require('../services/notify');
 
 const router = express.Router();
 
@@ -116,6 +117,7 @@ router.post('/invoices', requireAuth, requireRole('admin'), (req, res) => {
     return db.prepare('SELECT * FROM invoices WHERE id = ?').get(id);
   });
 
+  notify(vendor.id, `Invoice ${invoice.id} was created for you (draft)`);
   res.status(201).json({ invoice: withDetails(invoice) });
 });
 
@@ -150,6 +152,7 @@ router.post(
         .json({ error: `Only draft invoices can be sent (status: ${invoice.status})` });
     }
     db.prepare("UPDATE invoices SET status = 'sent' WHERE id = ?").run(invoice.id);
+    notify(invoice.vendorId, `Invoice ${invoice.id} was sent to you`);
     res.json({
       invoice: withDetails(
         db.prepare('SELECT * FROM invoices WHERE id = ?').get(invoice.id)
@@ -171,6 +174,7 @@ router.post(
     db.prepare("UPDATE invoices SET status = 'cancelled' WHERE id = ?").run(
       invoice.id
     );
+    notify(invoice.vendorId, `Invoice ${invoice.id} was cancelled`);
     res.json({
       invoice: withDetails(
         db.prepare('SELECT * FROM invoices WHERE id = ?').get(invoice.id)

@@ -167,6 +167,8 @@ Chat        GET/POST /chat/:vendorId/messages        per-vendor thread; vendors
                                                      reach only their own thread
 Returns     POST /return-requests (vendor) · GET /return-requests
             POST /admin/return-requests/:id/respond  { action: approve | reject }
+Notifs      GET /notifications (own, latest 50 + unread count)
+            POST /notifications/read (mark all read)
 Dashboards  GET /dashboard/vendor · GET /dashboard/admin
 Misc        GET /admin/vendors (admin) · GET /health
 ```
@@ -234,13 +236,18 @@ timestamp — no signature provider.
   (quantity + optional reason); the admin approves or rejects it. Responding
   changes only the request status — the assignment specifies no further
   effect.
+- **Notifications** — per-user in-app notifications behind the bell icon in
+  the top bar (unread badge, opens a panel, opening marks all read). Events:
+  vendors are notified on pricing, status changes, MRN creation, invoice
+  creation/send/cancel, and price/return request responses; admins are
+  notified on MRN signatures and new price/return requests. Polls every 15s.
 
 The mock `stock_sync.csv` from the brief is included at
 `server/data/stock_sync.csv`, ready for the scheduled-sync bonus.
 
 ## 16. Known limitations / unimplemented bonus features
 
-- Bonus features not implemented: notifications, scheduled stock/sold sync
+- Bonus features not implemented: scheduled stock/sold sync
   (`POST /cron/sync`), payment summary, document upload, live deploy.
 - Chat updates by polling (5s), so messages can take a few seconds to appear
   on the other side.

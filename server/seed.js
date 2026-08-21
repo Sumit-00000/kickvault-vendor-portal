@@ -96,6 +96,7 @@ const priceRequest = {
 
 const runSeed = () => transaction(() => {
   for (const table of [
+    'notifications',
     'messages',
     'return_requests',
     'invoice_lines',
@@ -108,7 +109,7 @@ const runSeed = () => transaction(() => {
   ]) {
     db.prepare(`DELETE FROM ${table}`).run();
   }
-  db.prepare("DELETE FROM sqlite_sequence WHERE name IN ('users','mrn_items','invoice_lines','messages')").run();
+  db.prepare("DELETE FROM sqlite_sequence WHERE name IN ('users','mrn_items','invoice_lines','messages','notifications')").run();
 
   const passwordHash = bcrypt.hashSync(PASSWORD, 10);
   const idByEmail = {};

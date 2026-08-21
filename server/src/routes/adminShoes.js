@@ -1,6 +1,7 @@
 const express = require('express');
 const { db } = require('../db');
 const { requireAuth, requireRole } = require('../middleware/auth');
+const { notify } = require('../services/notify');
 
 const router = express.Router();
 
@@ -36,6 +37,7 @@ router.post(
       price,
       shoe.id
     );
+    notify(shoe.vendorId, `Your listing ${shoe.id} was priced at ${price}`);
     res.json({
       shoe: db.prepare('SELECT * FROM shoes WHERE id = ?').get(shoe.id),
     });
@@ -58,6 +60,7 @@ router.post(
     }
 
     db.prepare('UPDATE shoes SET status = ? WHERE id = ?').run(status, shoe.id);
+    notify(shoe.vendorId, `Your listing ${shoe.id} is now "${status}"`);
     res.json({
       shoe: db.prepare('SELECT * FROM shoes WHERE id = ?').get(shoe.id),
     });

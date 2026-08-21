@@ -699,3 +699,71 @@ td select {
 .chat-form input {
   flex: 1;
 }
+
+/* ---- notifications ---- */
+.notif-wrap {
+  position: relative;
+}
+
+.notif-btn {
+  position: relative;
+}
+
+.notif-count {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: var(--danger);
+  color: #fff;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  min-width: 16px;
+  height: 16px;
+  line-height: 16px;
+  text-align: center;
+  padding: 0 3px;
+}
+
+.notif-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  width: 340px;
+  max-height: 380px;
+  overflow-y: auto;
+  z-index: 20;
+  padding: 0.9rem;
+}
+
+.notif-panel h4 {
+  margin: 0 0 0.5rem;
+}
+
+.notif-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.notif-item {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0.4rem;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.88rem;
+}
+
+.notif-item:last-child {
+  border-bottom: none;
+}
+
+.notif-unread {
+  background: #f0f6ff;
+  border-radius: 6px;
+}
+
+.notif-time {
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-top: 0.1rem;
+}

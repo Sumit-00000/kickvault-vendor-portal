@@ -83,6 +83,14 @@ CREATE TABLE IF NOT EXISTS price_requests (
   createdAt       TEXT    NOT NULL DEFAULT (datetime('now'))
 );
 
+CREATE TABLE IF NOT EXISTS notifications (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  userId     INTEGER NOT NULL REFERENCES users(id),
+  message    TEXT    NOT NULL,
+  read       INTEGER NOT NULL DEFAULT 0,
+  createdAt  TEXT    NOT NULL DEFAULT (datetime('now'))
+);
+
 CREATE TABLE IF NOT EXISTS return_requests (
   id         TEXT    PRIMARY KEY,
   shoeId     TEXT    NOT NULL REFERENCES shoes(id),

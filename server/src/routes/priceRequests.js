@@ -1,6 +1,7 @@
 const express = require('express');
 const { db, transaction, nextId } = require('../db');
 const { requireAuth, requireRole } = require('../middleware/auth');
+const { notify, notifyAdmins } = require('../services/notify');
 
 const router = express.Router();
 
@@ -37,6 +38,9 @@ router.post('/price-requests', requireAuth, requireRole('vendor'), (req, res) =>
     return db.prepare(`${DETAIL_SELECT} WHERE pr.id = ?`).get(id);
   });
 
+  notifyAdmins(
+    `Price request ${request.id}: ${req.user.name} asks ${price} for ${shoe.id}`
+  );
   res.status(201).json({ request });
 });
 
@@ -91,6 +95,10 @@ router.post(
       return db.prepare(`${DETAIL_SELECT} WHERE pr.id = ?`).get(request.id);
     });
 
+    notify(
+      request.vendorId,
+      `Your price request ${request.id} was ${action === 'approve' ? 'approved' : 'rejected'}`
+    );
     res.json({ request: updated });
   }
 );
