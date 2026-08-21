@@ -506,3 +506,43 @@ td select {
   border-color: #fecaca;
   color: #991b1b;
 }
+
+/* ---- price-request status badges ---- */
+.pr-pending {
+  background: #fef3c7;
+  border-color: #fde68a;
+  color: #92400e;
+}
+
+.pr-approved {
+  background: #dcfce7;
+  border-color: #bbf7d0;
+  color: #166534;
+}
+
+.pr-rejected {
+  background: #fee2e2;
+  border-color: #fecaca;
+  color: #991b1b;
+}
+
+.pr-form {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.pr-form .field {
+  margin-bottom: 0;
+  min-width: 220px;
+}
+
+.pr-form .field:first-child {
+  flex: 1;
+  max-width: 480px;
+}
+
+.pr-form .form-actions {
+  margin: 0;
+}
