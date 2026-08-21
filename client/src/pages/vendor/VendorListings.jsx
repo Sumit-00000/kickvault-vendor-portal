@@ -225,6 +225,7 @@ export default function VendorListings() {
                 <th className="num">Asking price</th>
                 <th className="num">Admin price</th>
                 <th className="num">Qty</th>
+                <th className="num">Sold</th>
                 <th>Status</th>
                 <th></th>
               </tr>
@@ -241,6 +242,7 @@ export default function VendorListings() {
                   <td className="num">{s.askingPrice}</td>
                   <td className="num">{s.adminPrice ?? '—'}</td>
                   <td className="num">{s.qty}</td>
+                  <td className="num">{s.soldQty}</td>
                   <td>
                     <StatusBadge status={s.status} />
                   </td>

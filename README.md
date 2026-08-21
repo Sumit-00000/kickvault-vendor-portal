@@ -89,6 +89,7 @@ Open http://localhost:5173 and log in with any account from §11.
 | `PORT`          | API port                                           | `4000`  |
 | `JWT_SECRET`    | JWT signing secret — **required**, never committed | —       |
 | `DATABASE_PATH` | SQLite file path                                    | `./data/kickvault.db` |
+| `CRON_SECRET`   | Shared secret for `POST /cron/sync` (`x-cron-secret` header); sync returns 503 if unset | — |
 
 The server refuses to start without `JWT_SECRET` and prints the fix
 (`cp .env.example .env`). No secrets are committed; reviewers run with their
@@ -169,6 +170,8 @@ Returns     POST /return-requests (vendor) · GET /return-requests
             POST /admin/return-requests/:id/respond  { action: approve | reject }
 Notifs      GET /notifications (own, latest 50 + unread count)
             POST /notifications/read (mark all read)
+Stock sync  POST /cron/sync             header: x-cron-secret (no JWT) — reads
+                                        server/data/stock_sync.csv
 Dashboards  GET /dashboard/vendor · GET /dashboard/admin
 Misc        GET /admin/vendors (admin) · GET /health
 ```
@@ -242,13 +245,31 @@ timestamp — no signature provider.
   creation/send/cancel, and price/return request responses; admins are
   notified on MRN signatures and new price/return requests. Polls every 15s.
 
-The mock `stock_sync.csv` from the brief is included at
-`server/data/stock_sync.csv`, ready for the scheduled-sync bonus.
+- **Scheduled stock/sold sync (mock)** — `server/data/stock_sync.csv` (the
+  brief's mock "spreadsheet") is read and each matching listing's stock (`qty`)
+  and sold (`soldQty`) quantities are updated. No Google Sheets/Drive — the
+  CSV file is the mock. Two ways to run it:
+
+  ```bash
+  # via the protected endpoint (schedule with OS cron / Task Scheduler)
+  curl -X POST http://localhost:4000/cron/sync -H "x-cron-secret: <your CRON_SECRET>"
+
+  # or directly as a script
+  cd server && npm run sync
+  ```
+
+  The endpoint is guarded by the `x-cron-secret` header (503 when
+  `CRON_SECRET` isn't configured, 401 on a wrong secret). The response reports
+  updated listings, unknown SKUs, and invalid rows. Sold/stock columns are
+  visible on the listing tables.
 
 ## 16. Known limitations / unimplemented bonus features
 
-- Bonus features not implemented: scheduled stock/sold sync
-  (`POST /cron/sync`), payment summary, document upload, live deploy.
+- Bonus features not implemented: payment summary, document upload,
+  live deploy.
+- The stock sync is triggered on demand (endpoint or script); actual
+  scheduling is left to OS cron / Task Scheduler rather than an in-process
+  scheduler, keeping the server dependency-free.
 - Chat updates by polling (5s), so messages can take a few seconds to appear
   on the other side.
 - JWTs are stateless with a 12h expiry; there is no refresh token or logout

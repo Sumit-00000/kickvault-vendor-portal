@@ -88,6 +88,7 @@ export default function AdminInventory() {
               <th className="num">Asking</th>
               <th className="num">Admin price</th>
               <th className="num">Qty</th>
+              <th className="num">Sold</th>
               <th>Status</th>
               <th>Set price</th>
               <th>Set status</th>
@@ -111,6 +112,7 @@ export default function AdminInventory() {
                 <td className="num">{s.askingPrice}</td>
                 <td className="num">{s.adminPrice ?? '—'}</td>
                 <td className="num">{s.qty}</td>
+                <td className="num">{s.soldQty}</td>
                 <td>
                   <StatusBadge status={s.status} />
                 </td>

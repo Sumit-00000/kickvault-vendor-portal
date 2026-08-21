@@ -14,4 +14,5 @@ module.exports = {
   jwtSecret: process.env.JWT_SECRET,
   databasePath:
     process.env.DATABASE_PATH || path.join(__dirname, '..', 'data', 'kickvault.db'),
+  cronSecret: process.env.CRON_SECRET || '',
 };

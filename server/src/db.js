@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS shoes (
   askingPrice  REAL    NOT NULL,
   adminPrice   REAL,
   qty          INTEGER NOT NULL,
+  soldQty      INTEGER NOT NULL DEFAULT 0,
   status       TEXT    NOT NULL DEFAULT 'submitted'
                CHECK (status IN ('submitted', 'priced', 'live', 'sold', 'returned')),
   createdAt    TEXT    NOT NULL DEFAULT (datetime('now'))
@@ -110,6 +111,11 @@ CREATE TABLE IF NOT EXISTS messages (
   createdAt  TEXT    NOT NULL DEFAULT (datetime('now'))
 );
 `);
+
+const shoeColumns = db.prepare('PRAGMA table_info(shoes)').all();
+if (!shoeColumns.some((c) => c.name === 'soldQty')) {
+  db.exec('ALTER TABLE shoes ADD COLUMN soldQty INTEGER NOT NULL DEFAULT 0');
+}
 
 function transaction(fn) {
   db.exec('BEGIN');

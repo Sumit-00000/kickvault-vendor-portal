@@ -11,6 +11,7 @@
     "start": "node src/index.js",
     "dev": "node --watch src/index.js",
     "seed": "node seed.js",
+    "sync": "node scripts/sync.js",
     "test": "node --test \"tests/**/*.test.js\""
   },
   "dependencies": {

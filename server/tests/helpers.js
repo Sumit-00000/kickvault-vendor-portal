@@ -2,6 +2,7 @@ const os = require('os');
 const path = require('path');
 
 process.env.JWT_SECRET = 'test-secret-not-for-production';
+process.env.CRON_SECRET = 'test-cron-secret';
 process.env.DATABASE_PATH = path.join(
   os.tmpdir(),
   `kickvault-test-${process.pid}-${Math.random().toString(36).slice(2)}.db`
