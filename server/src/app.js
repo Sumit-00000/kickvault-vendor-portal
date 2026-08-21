@@ -7,6 +7,7 @@ const adminVendorsRoutes = require('./routes/adminVendors');
 const mrnRoutes = require('./routes/mrn');
 const invoicesRoutes = require('./routes/invoices');
 const priceRequestsRoutes = require('./routes/priceRequests');
+const dashboardRoutes = require('./routes/dashboard');
 
 const app = express();
 
@@ -30,7 +31,7 @@ app.use(adminVendorsRoutes);
 app.use(mrnRoutes);
 app.use(invoicesRoutes);
 app.use(priceRequestsRoutes);
-// Feature routes are mounted here as they are implemented (dashboards).
+app.use(dashboardRoutes);
 
 // 404 for unknown routes
 app.use((req, res) => {

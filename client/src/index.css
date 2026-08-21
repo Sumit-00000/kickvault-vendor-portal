@@ -546,3 +546,44 @@ td select {
 .pr-form .form-actions {
   margin: 0;
 }
+
+/* ---- dashboards ---- */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.stat-value {
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.stat-sub {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.chart-card {
+  margin-top: 1.5rem;
+}
+
+.chart-card h3 {
+  margin: 0 0 1rem;
+}
