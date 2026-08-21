@@ -5,6 +5,7 @@ import { useAuth } from '../auth'
 const NAV = {
   vendor: [
     { to: '/vendor', label: 'Dashboard', end: true },
+    { to: '/vendor/listings', label: 'Listings' },
     { to: '/vendor/kyc', label: 'KYC' },
   ],
   admin: [{ to: '/admin', label: 'Dashboard', end: true }],

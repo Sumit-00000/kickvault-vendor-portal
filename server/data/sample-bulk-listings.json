@@ -1,0 +1,20 @@
+[
+  {
+    "brand": "Vans",
+    "model": "Old Skool Black White",
+    "size": "US 9",
+    "sku": "VANS-OS-9",
+    "condition": "New",
+    "askingPrice": 4499,
+    "qty": 2
+  },
+  {
+    "brand": "Converse",
+    "model": "Chuck 70 Hi Parchment",
+    "size": "US 10",
+    "sku": "CONV-C70-10",
+    "condition": "Used - Good",
+    "askingPrice": 3499,
+    "qty": 1
+  }
+]

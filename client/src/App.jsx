@@ -5,6 +5,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import VendorDashboard from './pages/vendor/VendorDashboard'
 import VendorKyc from './pages/vendor/VendorKyc'
+import VendorListings from './pages/vendor/VendorListings'
 import AdminDashboard from './pages/admin/AdminDashboard'
 
 function HomeRedirect() {
@@ -23,6 +24,7 @@ export default function App() {
       <Route element={<RequireRole role="vendor" />}>
         <Route path="/vendor" element={<VendorDashboard />} />
         <Route path="/vendor/kyc" element={<VendorKyc />} />
+        <Route path="/vendor/listings" element={<VendorListings />} />
       </Route>
 
       <Route element={<RequireRole role="admin" />}>

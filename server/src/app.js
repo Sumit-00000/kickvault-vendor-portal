@@ -1,6 +1,7 @@
 const express = require('express');
 const authRoutes = require('./routes/auth');
 const kycRoutes = require('./routes/kyc');
+const shoesRoutes = require('./routes/shoes');
 
 const app = express();
 
@@ -10,6 +11,7 @@ const app = express();
 app.set('trust proxy', 'loopback');
 
 app.use(express.json());
+app.use(express.text({ type: 'text/csv', limit: '1mb' })); // CSV bulk upload
 
 app.get('/health', (req, res) => {
   res.json({ ok: true });
@@ -17,8 +19,9 @@ app.get('/health', (req, res) => {
 
 app.use(authRoutes);
 app.use(kycRoutes);
+app.use(shoesRoutes);
 // Feature routes are mounted here as they are implemented
-// (shoes, mrn, invoices, price-requests, dashboards).
+// (mrn, invoices, price-requests, dashboards).
 
 // 404 for unknown routes
 app.use((req, res) => {
