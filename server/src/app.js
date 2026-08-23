@@ -12,6 +12,7 @@ const chatRoutes = require('./routes/chat');
 const returnRequestsRoutes = require('./routes/returnRequests');
 const notificationsRoutes = require('./routes/notifications');
 const cronRoutes = require('./routes/cron');
+const paymentsRoutes = require('./routes/payments');
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.use(chatRoutes);
 app.use(returnRequestsRoutes);
 app.use(notificationsRoutes);
 app.use(cronRoutes);
+app.use(paymentsRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ error: 'Not found' });

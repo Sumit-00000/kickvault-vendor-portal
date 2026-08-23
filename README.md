@@ -172,6 +172,7 @@ Notifs      GET /notifications (own, latest 50 + unread count)
             POST /notifications/read (mark all read)
 Stock sync  POST /cron/sync             header: x-cron-secret (no JWT) — reads
                                         server/data/stock_sync.csv
+Payments    GET /payments/summary       vendor: own summary · admin: per vendor
 Dashboards  GET /dashboard/vendor · GET /dashboard/admin
 Misc        GET /admin/vendors (admin) · GET /health
 ```
@@ -262,11 +263,14 @@ timestamp — no signature provider.
   `CRON_SECRET` isn't configured, 401 on a wrong secret). The response reports
   updated listings, unknown SKUs, and invalid rows. Sold/stock columns are
   visible on the listing tables.
+- **Payment summary** — per vendor: sold quantity × settlement price (invoice
+  unit price), minus the invoice's commission percentage, across non-cancelled
+  invoices. Vendors see their own summary on the *Payments* page; admins see a
+  per-vendor table.
 
 ## 16. Known limitations / unimplemented bonus features
 
-- Bonus features not implemented: payment summary, document upload,
-  live deploy.
+- Bonus features not implemented: document upload, live deploy.
 - The stock sync is triggered on demand (endpoint or script); actual
   scheduling is left to OS cron / Task Scheduler rather than an in-process
   scheduler, keeping the server dependency-free.
