@@ -1,4 +1,5 @@
 const express = require('express');
+const config = require('./config');
 const authRoutes = require('./routes/auth');
 const kycRoutes = require('./routes/kyc');
 const shoesRoutes = require('./routes/shoes');
@@ -16,7 +17,21 @@ const paymentsRoutes = require('./routes/payments');
 
 const app = express();
 
-app.set('trust proxy', 'loopback');
+app.set('trust proxy', config.trustProxy);
+
+if (config.corsOrigin) {
+  app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', config.corsOrigin);
+    res.setHeader('Vary', 'Origin');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PATCH,DELETE,OPTIONS');
+    res.setHeader(
+      'Access-Control-Allow-Headers',
+      'Content-Type, Authorization, x-cron-secret'
+    );
+    if (req.method === 'OPTIONS') return res.sendStatus(204);
+    next();
+  });
+}
 
 app.use(express.json());
 app.use(express.text({ type: 'text/csv', limit: '1mb' }));

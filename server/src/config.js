@@ -15,4 +15,8 @@ module.exports = {
   databasePath:
     process.env.DATABASE_PATH || path.join(__dirname, '..', 'data', 'kickvault.db'),
   cronSecret: process.env.CRON_SECRET || '',
+  corsOrigin: process.env.CORS_ORIGIN || '',
+  trustProxy: process.env.TRUST_PROXY
+    ? Number(process.env.TRUST_PROXY)
+    : 'loopback',
 };

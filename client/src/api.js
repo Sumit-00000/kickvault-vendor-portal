@@ -1,3 +1,5 @@
+const API_BASE = import.meta.env.VITE_API_URL || '/api'
+
 export async function apiFetch(
   path,
   { method = 'GET', body, bodyRaw, contentType, token } = {},
@@ -7,7 +9,7 @@ export async function apiFetch(
   else if (body !== undefined) headers['Content-Type'] = 'application/json'
   if (token) headers.Authorization = `Bearer ${token}`
 
-  const res = await fetch(`/api${path}`, {
+  const res = await fetch(`${API_BASE}${path}`, {
     method,
     headers,
     body: bodyRaw !== undefined ? bodyRaw : body !== undefined ? JSON.stringify(body) : undefined,
@@ -23,7 +25,7 @@ export async function apiFetch(
 }
 
 export async function apiDownload(path, token, filename) {
-  const res = await fetch(`/api${path}`, {
+  const res = await fetch(`${API_BASE}${path}`, {
     headers: { Authorization: `Bearer ${token}` },
   })
   if (!res.ok) {

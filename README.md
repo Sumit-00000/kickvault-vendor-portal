@@ -29,7 +29,7 @@ and act on their own records.
 | Auth      | JWT (12h expiry), bcryptjs password hashing, per-role route guards, login rate limiting |
 | Frontend  | React 18 SPA (Vite), react-router, Recharts for the dashboard chart, hand-rolled CSS |
 | PDF       | pdfkit — generated locally on demand, streamed to the client |
-| Tests     | node:test + supertest (33 API tests) |
+| Tests     | node:test + supertest (49 API tests) |
 
 ## 3. Architecture overview
 
@@ -42,10 +42,12 @@ server/                      Express API
 │   ├── db.js                node:sqlite connection, schema, transaction + id helpers
 │   ├── middleware/          auth.js (JWT + role guards), rateLimit.js (login limiter)
 │   ├── routes/              auth, kyc, shoes, adminShoes, adminVendors, mrn,
-│   │                        invoices, priceRequests, dashboard
-│   ├── services/pdf.js      pdfkit layout + MRN/invoice PDF generation
-│   └── utils/csv.js         small CSV parser (bulk upload)
+│   │                        invoices, priceRequests, dashboard, chat,
+│   │                        returnRequests, notifications, cron, payments
+│   ├── services/            pdf.js, notify.js, stockSync.js
+│   └── utils/csv.js         small CSV parser (bulk upload + stock sync)
 ├── seed.js                  loads the assignment's dummy data (idempotent)
+├── scripts/sync.js          stock sync as a runnable script (npm run sync)
 ├── tests/                   automated API test suite
 └── data/                    stock_sync.csv (assignment), sample bulk-upload files
 
@@ -121,8 +123,9 @@ re-running resets the database to this state.
 
 ```bash
 cd server && npm start      # or: npm run dev (auto-restart on change)
-npm test                    # 33 API tests (auth, KYC, inventory, MRN, invoices,
-                            # price requests, dashboards)
+npm test                    # 49 API tests (auth, KYC, inventory, MRN, invoices,
+                            # price requests, dashboards, chat, returns,
+                            # notifications, stock sync, payments)
 ```
 
 ## 10. Run the frontend
@@ -270,7 +273,7 @@ timestamp — no signature provider.
 
 ## 16. Known limitations / unimplemented bonus features
 
-- Bonus features not implemented: document upload, live deploy.
+- Bonus features not implemented: document upload.
 - The stock sync is triggered on demand (endpoint or script); actual
   scheduling is left to OS cron / Task Scheduler rather than an in-process
   scheduler, keeping the server dependency-free.
@@ -283,3 +286,35 @@ timestamp — no signature provider.
 - Currency is displayed as plain numbers (see §14).
 - Vendor bulk upload expects the documented CSV header exactly
   (`brand,model,size,sku,condition,askingPrice,qty`).
+
+## 17. Live deployment (Vercel + Render)
+
+The frontend deploys to Vercel (static SPA) and the API to Render's free
+tier (a long-running Node server — Vercel's serverless model can't host the
+Express + SQLite backend).
+
+**Live demo:** `https://kickvault-vendor-portal.vercel.app` · API: `https://kickvault-vendor-portal.onrender.com`
+
+Backend (Render → New → Web Service, connect this repo):
+
+| Setting | Value |
+| --- | --- |
+| Root directory | `server` |
+| Build command | `npm install` |
+| Start command | `node seed.js && node src/index.js` |
+| Env vars | `JWT_SECRET`, `CRON_SECRET`, `TRUST_PROXY=1`, `CORS_ORIGIN=<your Vercel URL>`, `NODE_VERSION=22.16.0` |
+
+Frontend (Vercel → New Project, same repo):
+
+| Setting | Value |
+| --- | --- |
+| Root directory | `client` |
+| Framework preset | Vite |
+| Env var | `VITE_API_URL=https://kickvault-vendor-portal.onrender.com` |
+
+Notes: the Render free instance has an ephemeral disk and spins down when
+idle — the start command reseeds the dummy data on every boot (a fresh demo
+for every reviewer), and the first request after idling can take ~a minute.
+`CORS_ORIGIN` enables browser calls from the Vercel domain; `TRUST_PROXY=1`
+keeps the login rate limiter keyed on real client IPs behind Render's proxy.
+Locally nothing changes — leave both unset and the Vite dev proxy is used.
