@@ -94,8 +94,7 @@ Open http://localhost:5173 and log in with any account from §11.
 | `CRON_SECRET`   | Shared secret for `POST /cron/sync` (`x-cron-secret` header); sync returns 503 if unset | — |
 
 The server refuses to start without `JWT_SECRET` and prints the fix
-(`cp .env.example .env`). No secrets are committed; reviewers run with their
-own `.env`.
+(`cp .env.example .env`). No secrets are committed;
 
 ## 6. .env.example
 
@@ -293,24 +292,7 @@ The frontend deploys to Vercel (static SPA) and the API to Render's free
 tier (a long-running Node server — Vercel's serverless model can't host the
 Express + SQLite backend).
 
-**Live demo:** `https://kickvault-vendor-portal.vercel.app` · API: `https://kickvault-vendor-portal.onrender.com`
-
-Backend (Render → New → Web Service, connect this repo):
-
-| Setting | Value |
-| --- | --- |
-| Root directory | `server` |
-| Build command | `npm install` |
-| Start command | `node seed.js && node src/index.js` |
-| Env vars | `JWT_SECRET`, `CRON_SECRET`, `TRUST_PROXY=1`, `CORS_ORIGIN=<your Vercel URL>`, `NODE_VERSION=22.16.0` |
-
-Frontend (Vercel → New Project, same repo):
-
-| Setting | Value |
-| --- | --- |
-| Root directory | `client` |
-| Framework preset | Vite |
-| Env var | `VITE_API_URL=https://kickvault-vendor-portal.onrender.com` |
+**Live demo:** `https://kickvault-vendor-portal.vercel.app` · API: `https://kickvault-vendor-portal.onrender.com`|
 
 Notes: the Render free instance has an ephemeral disk and spins down when
 idle — the start command reseeds the dummy data on every boot (a fresh demo
